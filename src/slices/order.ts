@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient, TConstructorIngredient, TOrder } from '../utils/types';
 import { orderBurgerApi, TNewOrderResponse } from '../utils/burger-api';
+import { nanoid } from 'nanoid';
 
 interface OrderState {
   constructorItems: {
@@ -34,23 +35,17 @@ const OrderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    addOrderItem(state, action: PayloadAction<TIngredient>) {
-      if (action.payload.type === 'bun') {
-        state.constructorItems.bun = {
-          ...action.payload,
-          id: action.payload._id
-        };
-      } else {
-        const index = String(
-          state.constructorItems.ingredients.filter(
-            (ingredient) => ingredient._id == action.payload._id
-          ).length
-        );
-
-        state.constructorItems.ingredients.push({
-          ...action.payload,
-          id: action.payload._id + index
-        });
+    addOrderItem: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.constructorItems.bun = action.payload;
+        } else {
+          state.constructorItems.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => {
+        const id = nanoid();
+        return { payload: { ...ingredient, id } };
       }
     },
     removeOrderIngredient(state, action: PayloadAction<string>) {
