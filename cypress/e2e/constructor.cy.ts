@@ -1,3 +1,23 @@
+declare namespace Cypress {
+  interface Chainable {
+    getModal: () => Chainable<JQuery<HTMLElement>>;
+    addClick: () => void;
+    checkEmpty: () => void;
+  }
+}
+
+Cypress.Commands.add('getModal', () => cy.get('[data-cy="modal"]'));
+Cypress.Commands.add('addClick', () => {
+  cy.get('@bun').contains('Добавить').click();
+  cy.get('@sauce').contains('Добавить').click();
+  cy.get('@main').contains('Добавить').click();
+});
+Cypress.Commands.add('checkEmpty', () => {
+  cy.get('[data-cy="emptyTopBun"]').contains('Выберите булки');
+  cy.get('[data-cy="emptyIngredients"]').contains('Выберите начинку');
+  cy.get('[data-cy="emptyBottomBun"]').contains('Выберите булки');
+});
+
 describe('Тест страницы конструктора', () => {
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', {
@@ -13,13 +33,9 @@ describe('Тест страницы конструктора', () => {
   });
 
   it('Тест функций добавления ингредиентов', () => {
-    cy.get('[data-cy="emptyTopBun"]').contains('Выберите булки');
-    cy.get('[data-cy="emptyIngredients"]').contains('Выберите начинку');
-    cy.get('[data-cy="emptyBottomBun"]').contains('Выберите булки');
+    cy.checkEmpty();
 
-    cy.get('@bun').contains('Добавить').click();
-    cy.get('@sauce').contains('Добавить').click();
-    cy.get('@main').contains('Добавить').click();
+    cy.addClick();
 
     cy.get('[data-cy="topBun"]').should('exist');
     cy.get('[data-cy="ingredients"]').children('li').should('have.length', 2);
@@ -29,22 +45,22 @@ describe('Тест страницы конструктора', () => {
   describe('Тест модального окна', () => {
     it('Тест открытия модального окна', () => {
       cy.get('@bun').click();
-
-      cy.get('[data-cy="modal"]').should('be.visible');
+  
+      cy.getModal().should('be.visible');
     });
 
     it('Тест закрытия модального окна кликом на кнопку', () => {
       cy.get('@bun').click();
       cy.get('[data-cy="modalCloseButton"]').click();
 
-      cy.get('[data-cy="modal"]').should('not.exist');
+      cy.getModal().should('not.exist');
     });
 
     it('Тест закрытия модального окна кликом на оверлей', () => {
       cy.get('@bun').click();
       cy.get('[data-cy="modalOverlay"]').click({ force: true });
 
-      cy.get('[data-cy="modal"]').should('not.exist');
+      cy.getModal().should('not.exist');
     });
   });
 
@@ -64,21 +80,17 @@ describe('Тест страницы конструктора', () => {
       window.localStorage.setItem('refreshToken', 'test');
     });
 
-    cy.get('@bun').contains('Добавить').click();
-    cy.get('@sauce').contains('Добавить').click();
-    cy.get('@main').contains('Добавить').click();
+    cy.addClick();
 
     cy.get('[data-cy="orderButton"]').click();
 
     cy.wait('@order');
-    cy.get('[data-cy="modal"]').should('be.visible');
+    cy.getModal().should('be.visible');
     cy.get('[data-cy="orderNubmer"]').should('contain', '79505');
     cy.get('[data-cy="modalCloseButton"]').click();
-    cy.get('[data-cy="modal"]').should('not.exist');
+    cy.getModal().should('not.exist');
 
-    cy.get('[data-cy="emptyTopBun"]').contains('Выберите булки');
-    cy.get('[data-cy="emptyIngredients"]').contains('Выберите начинку');
-    cy.get('[data-cy="emptyBottomBun"]').contains('Выберите булки');
+    cy.checkEmpty();
 
     cy.clearCookie('accessToken');
     window.localStorage.removeItem('refreshToken');
