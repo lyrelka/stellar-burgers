@@ -17,9 +17,9 @@ import { useState, useRef, useEffect, FC } from 'react';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { ProtectedRoute } from '../../components/protected-route';
 import { useDispatch } from '../../services/store';
-import { getIngredientsThunk } from '../../slices/ingredients';
-import { getFeedsThunk } from '../../slices/feeds';
-import { getUserThunk, getOrdersThunk } from '../../slices/user';
+import { getIngredientsThunk } from '../../slices/ingredients/ingredients';
+import { getFeedsThunk } from '../../slices/feeds/feeds';
+import { getUserThunk, getOrdersThunk } from '../../slices/user/user';
 
 const App = () => {
   const location = useLocation();

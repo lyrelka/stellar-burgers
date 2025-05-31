@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TUser, TOrder } from '../utils/types';
+import { TUser, TOrder } from '../../utils/types';
 import {
   registerUserApi,
   TRegisterData,
@@ -9,24 +9,24 @@ import {
   getUserApi,
   updateUserApi,
   getOrdersApi
-} from '../utils/burger-api';
-import { setCookie, deleteCookie } from '../utils/cookie';
+} from '../../utils/burger-api';
+import { setCookie, deleteCookie } from '../../utils/cookie';
 
 type TUserState = {
   orders: TOrder[];
   data: TUser | null;
   isLoading: boolean;
-  error: string | null;
+  error: string;
   refreshToken: string | null;
   accessToken: string | null;
   isAuthenticated: boolean;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   orders: [],
   data: null,
   isLoading: false,
-  error: null,
+  error: '',
   refreshToken: '',
   accessToken: '',
   isAuthenticated: false
@@ -79,11 +79,11 @@ export const userSlice = createSlice({
     builder
       .addCase(registerUserThunk.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.error = '';
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || null;
+        state.error = action.error.message || '';
       })
       .addCase(registerUserThunk.fulfilled, (state, { payload }) => {
         state.data = payload.user;
@@ -95,11 +95,11 @@ export const userSlice = createSlice({
 
       .addCase(loginUserThunk.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.error = '';
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || null;
+        state.error = action.error.message || '';
       })
       .addCase(loginUserThunk.fulfilled, (state, { payload }) => {
         state.data = payload.user;
@@ -111,11 +111,11 @@ export const userSlice = createSlice({
 
       .addCase(logoutUserThunk.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.error = '';
       })
       .addCase(logoutUserThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || null;
+        state.error = action.error.message || '';
       })
       .addCase(logoutUserThunk.fulfilled, (state) => {
         state.isAuthenticated = false;
@@ -127,10 +127,11 @@ export const userSlice = createSlice({
 
       .addCase(getUserThunk.pending, (state) => {
         state.isLoading = true;
+        state.error = '';
       })
       .addCase(getUserThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || null;
+        state.error = action.error.message || '';
       })
       .addCase(getUserThunk.fulfilled, (state, { payload }) => {
         state.data = payload.user;
@@ -140,10 +141,11 @@ export const userSlice = createSlice({
 
       .addCase(updateUserThunk.pending, (state) => {
         state.isLoading = true;
+        state.error = '';
       })
       .addCase(updateUserThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || null;
+        state.error = action.error.message || '';
       })
       .addCase(updateUserThunk.fulfilled, (state, { payload }) => {
         state.data = payload.user;
@@ -152,10 +154,11 @@ export const userSlice = createSlice({
 
       .addCase(getOrdersThunk.pending, (state) => {
         state.isLoading = true;
+        state.error = '';
       })
       .addCase(getOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || null;
+        state.error = action.error.message || '';
       })
       .addCase(getOrdersThunk.fulfilled, (state, { payload }) => {
         state.orders = payload;

@@ -10,9 +10,9 @@ import {
   selectOrderResponse,
   selectIngredientsIdList,
   resetOrder
-} from '../../slices/order';
-import { selectAuth, getOrdersThunk } from '../../slices/user';
-import { getFeedsThunk } from '../../slices/feeds';
+} from '../../slices/order/order';
+import { selectAuth, getOrdersThunk } from '../../slices/user/user';
+import { getFeedsThunk } from '../../slices/feeds/feeds';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();

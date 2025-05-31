@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { TIngredient, TConstructorIngredient, TOrder } from '../utils/types';
-import { orderBurgerApi, TNewOrderResponse } from '../utils/burger-api';
+import { TIngredient, TConstructorIngredient, TOrder } from '../../utils/types';
+import { orderBurgerApi, TNewOrderResponse } from '../../utils/burger-api';
 import { nanoid } from 'nanoid';
 
 interface OrderState {
@@ -8,6 +8,7 @@ interface OrderState {
     bun: null | TConstructorIngredient;
     ingredients: TConstructorIngredient[];
   };
+  error: string;
   isLoading: boolean;
   response: TNewOrderResponse | null;
 }
@@ -17,12 +18,13 @@ type TMoveAction = {
   direction: number;
 };
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   constructorItems: {
     bun: null,
     ingredients: []
   },
   isLoading: false,
+  error: '',
   response: null
 };
 
@@ -90,9 +92,11 @@ const OrderSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(orderBurgerThunk.pending, (state) => {
       state.isLoading = true;
+      state.error = '';
     });
-    builder.addCase(orderBurgerThunk.rejected, (state) => {
+    builder.addCase(orderBurgerThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || '';
     });
     builder.addCase(orderBurgerThunk.fulfilled, (state, { payload }) => {
       state.isLoading = false;

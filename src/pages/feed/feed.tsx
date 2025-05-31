@@ -7,7 +7,7 @@ import {
   selectFeedsOrders,
   selectFeedsLoading,
   getFeedsThunk
-} from '../../slices/feeds';
+} from '../../slices/feeds/feeds';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();

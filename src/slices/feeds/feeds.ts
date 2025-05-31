@@ -1,15 +1,17 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getFeedsApi } from '../utils/burger-api';
-import { TOrdersData } from '../utils/types';
+import { getFeedsApi } from '../../utils/burger-api';
+import { TOrdersData } from '../../utils/types';
 
 interface FeedsState {
   data: TOrdersData;
   isLoading: boolean;
+  error: string;
 }
 
 export const initialState: FeedsState = {
   data: { orders: [], total: 0, totalToday: 0 },
-  isLoading: false
+  isLoading: false,
+  error: ''
 };
 
 export const getFeedsThunk = createAsyncThunk('feeds/getFeeds', getFeedsApi);
@@ -34,9 +36,11 @@ const feedsSlice = createSlice({
     builder
       .addCase(getFeedsThunk.pending, (state) => {
         state.isLoading = true;
+        state.error = '';
       })
-      .addCase(getFeedsThunk.rejected, (state) => {
+      .addCase(getFeedsThunk.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.error.message || '';
       })
       .addCase(getFeedsThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
