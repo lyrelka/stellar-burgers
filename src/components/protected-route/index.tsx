@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from '../../services/store';
 import { Navigate, useLocation } from 'react-router-dom';
-import { selectUserLoading, selectUserData } from '../../slices/user';
+import { selectUserLoading, selectUserData } from '../../slices/user/user';
 import { Preloader } from '@ui';
 
 type ProtectedRouteProps = {

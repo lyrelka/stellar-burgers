@@ -4,8 +4,8 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
-import { selectIngredients } from '../../slices/ingredients';
-import { selectOrderByNumber } from '../../slices/feeds';
+import { selectIngredients } from '../../slices/ingredients/ingredients';
+import { selectOrderByNumber } from '../../slices/feeds/feeds';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();

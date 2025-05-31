@@ -7,7 +7,7 @@ import {
   selectBuns,
   selectMains,
   selectSauces
-} from '../../slices/ingredients';
+} from '../../slices/ingredients/ingredients';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 
 export const BurgerIngredients: FC = () => {
