@@ -4,7 +4,7 @@ import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 
 import { useSelector } from '../../services/store';
-import { selectUserLoading, selectUserOrders } from '../../slices/user';
+import { selectUserLoading, selectUserOrders } from '../../slices/user/user';
 
 export const ProfileOrders: FC = () => {
   const isLoading = useSelector(selectUserLoading);
